@@ -19,3 +19,8 @@ services:
       - POSTGRES_DB=basic_app_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - basic-app-db-data:/var/lib/postgresql/data
+
+volumes: 
+  basic-app-db-data:
