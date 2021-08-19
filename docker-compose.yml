@@ -1,0 +1,21 @@
+version: "3.9"
+
+services: 
+  basic-app:
+    build: .
+    container_name: basic-app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes: 
+      - .:/usr/src/app
+    ports: 
+      - "8000:8000"
+    depends_on: 
+      - basic-app-db
+
+  basic-app-db:
+    image: postgres
+    container_name: basic-app-db
+    environment: 
+      - POSTGRES_DB=basic_app_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
