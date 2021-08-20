@@ -1,26 +1,50 @@
 version: "3.9"
 
-services: 
+services:
   basic-app:
     build: .
     container_name: basic-app
     command: python manage.py runserver 0.0.0.0:8000
-    volumes: 
+    volumes:
       - .:/usr/src/app
-    ports: 
+    ports:
       - "8000:8000"
-    depends_on: 
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://basic-app-redis:6379/0
+      - CELERY_BACKEND=redis://basic-app-redis:6379/0
+    depends_on:
       - basic-app-db
+      - basic-app-redis
+
+  basic-app-celery:
+    build: .
+    command: celery -A core worker -l INFO
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://basic-app-redis:6379/0
+      - CELERY_BACKEND=redis://basic-app-redis:6379/0
+    depends_on:
+      - basic-app
+      - basic-app-db
+      - basic-app-redis
 
   basic-app-db:
     image: postgres
     container_name: basic-app-db
-    environment: 
+    environment:
       - POSTGRES_DB=basic_app_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    volumes: 
+    volumes:
       - basic-app-db-data:/var/lib/postgresql/data
 
-volumes: 
+  basic-app-redis:
+    image: redis
+
+volumes:
   basic-app-db-data:
