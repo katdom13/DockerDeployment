@@ -4,7 +4,6 @@ services:
   basic-app:
     build: .
     container_name: basic-app
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src/app
     ports:
