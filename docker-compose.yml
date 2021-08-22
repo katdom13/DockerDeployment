@@ -2,10 +2,11 @@ version: "3.9"
 
 services:
   basic-app:
-    build: .
+    build: 
+      context: ./backend
     container_name: basic-app
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
     ports:
       - "8000:8000"
     environment:
@@ -17,10 +18,11 @@ services:
       - basic-app-redis
 
   basic-app-celery:
-    build: .
+    build: 
+      context: ./backend
     command: celery -A core worker -l INFO
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
     environment:
       - DEBUG=1
       - CELERY_BROKER=redis://basic-app-redis:6379/0
