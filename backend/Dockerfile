@@ -2,7 +2,7 @@ FROM python:3
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/backend
 
 COPY requirements.txt ./
 
