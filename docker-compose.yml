@@ -11,6 +11,7 @@ services:
       - "8000:8000"
     environment:
       - DEBUG=1
+      - FROM_DOCKER=1
       - CELERY_BROKER=redis://basic-app-redis:6379/0
       - CELERY_BACKEND=redis://basic-app-redis:6379/0
     depends_on:
@@ -20,6 +21,10 @@ services:
   basic-app-frontend:
     build:
       context: ./frontend/basic-app-frontend
+    ports:
+      - "3000:3000"
+    environment: 
+      - FROM_DOCKER=1
     volumes:
       - next_build:/usr/src/app/frontend/.next
   

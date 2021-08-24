@@ -25,6 +25,8 @@ env = environ.Env(
 # reading .env file
 environ.Env.read_env()
 
+# Others
+FROM_DOCKER = os.environ.get('FROM_DOCKER', False)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -98,6 +100,11 @@ DATABASES = {
         'PASSWORD': 'postgres',
         'HOST': 'basic-app-db',
         'PORT': 5432,
+    }
+} if FROM_DOCKER else {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
